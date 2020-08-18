@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/olibn333/horde/issues"
   },
-  "homepage": "https://github.com/olibn333/horde#readme"
+  "homepage": "https://github.com/olibn333/horde#readme",
+  "dependencies": {
+    "net": "^1.0.2"
+  }
 }

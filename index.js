@@ -1,25 +1,27 @@
-const inquirer = require('inquirer');
 const net = require('net')
 const fs = require('fs');
 const server = require('./serverInfo.json')
 const weaponsArray = fs.readFileSync('weaponsRotationList.txt').toString().split("\n");
 
+function initLoop(){
+    for (i=0; i<weaponsArray.length; i++){
+        await giveRandomWeapons(weaponsArray[i])
+        sleep
+    }
+}
 giveRandomWeapons()
 
-function giveRandomWeapons(){
-    async() =>{
-        let activeSocket = await spinServer(server)
-        let players = activeSocket.playerList.PlayerList
-        let thisWeapon = weaponsArray[i]
-        let promiseArray = []
-        players.forEach(player => {
-            const command = 'GiveItem ' + player.UniqueId + ' ' + thisWeapon
-            const commandPromise = commandHandler(activeSocket,command)
-            promiseArray.push(commandPromise)
-        });
-        const giveAll = await Promise.all(promiseArray)
-        console.log(giveAll)
-    }
+async function giveRandomWeapons(weaponTxt){
+    let activeSocket = await spinServer(server)
+    let players = activeSocket.playerList.PlayerList
+    let promiseArray = []
+    players.forEach(player => {
+        const command = 'GiveItem ' + player.UniqueId + ' ' + weaponTxt
+        const commandPromise = commandHandler(activeSocket,command)
+        promiseArray.push(commandPromise)
+    });
+    const giveAll = await Promise.all(promiseArray)
+    console.log(giveAll)
 }
 
 function commandHandler(socket, command) {
