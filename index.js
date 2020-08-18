@@ -8,9 +8,15 @@ initLoop().then(console.log('OK.'))
 async function initLoop() {
     for (i = 0; i < weaponsArray.length; i++) {
         await giveRandomWeapons(weaponsArray[i])
-        setTimeout(console.log('Next...'),10000)
+        await sleep(10000)
     }
 }
+
+function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }  
 
 async function giveRandomWeapons(weaponTxt) {
     let activeSocket = await spinServer(server)
