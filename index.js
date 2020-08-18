@@ -20,12 +20,14 @@ function sleep(ms) {
 
 async function giveRandomWeapons(weaponTxt) {
     let activeSocket = await spinServer(server)
-    console.log(activeSocket)
+    //console.log(activeSocket)
     let players = activeSocket.playerList.playerList
+    console.log(players)
     if (players) {
         let promiseArray = []
         players.forEach(player => {
             const command = 'GiveItem ' + player.UniqueId + ' ' + weaponTxt
+            console.log(command)
             const commandPromise = commandHandler(activeSocket, command)
             promiseArray.push(commandPromise)
         });
