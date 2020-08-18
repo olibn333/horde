@@ -21,7 +21,7 @@ function sleep(ms) {
 async function giveRandomWeapons(weaponTxt) {
     let activeSocket = await spinServer(server)
     //console.log(activeSocket)
-    let players = activeSocket.playerList.playerList
+    let players = activeSocket.playerList
     console.log(players)
     if (players) {
         let promiseArray = []
