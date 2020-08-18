@@ -14,7 +14,8 @@ async function initLoop() {
 
 async function giveRandomWeapons(weaponTxt) {
     let activeSocket = await spinServer(server)
-    let players = activeSocket.playerList.PlayerList
+    console.log(activeSocket)
+    let players = activeSocket.playerList
     let promiseArray = []
     players.forEach(player => {
         const command = 'GiveItem ' + player.UniqueId + ' ' + weaponTxt
@@ -53,8 +54,8 @@ function spinServer(server) {
             if (data.toString().startsWith('Authenticated=1')) {
                 console.log('Logged in!');
                 (async () => {
-                    resolve(socket);
                     socket.playerList = JSON.parse(await commandHandler(socket, 'RefreshList'))
+                    resolve(socket);
                 })();
                 setInterval(function () {
                     (async () => {
