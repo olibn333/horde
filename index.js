@@ -8,7 +8,7 @@ initLoop().then(console.log('OK.'))
 async function initLoop() {
     for (i = 0; i < weaponsArray.length; i++) {
         await giveRandomWeapons(weaponsArray[i])
-        await sleep(2000)
+        setTimeout(consol.log('Next...'),10000)
     }
 }
 
