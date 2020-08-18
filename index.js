@@ -3,7 +3,7 @@ const fs = require('fs');
 const server = require('./serverInfo.json')
 const weaponsArray = fs.readFileSync('weaponsRotationList.txt').toString().split("\n");
 
-initLoop().then(consol.log('Done.'))
+initLoop().then(console.log('OK.'))
 
 async function initLoop() {
     for (i = 0; i < weaponsArray.length; i++) {
