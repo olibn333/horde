@@ -1,15 +1,21 @@
 const net = require('net')
 const fs = require('fs');
 const server = require('./serverInfo.json')
-const weaponsArray = fs.readFileSync('weaponsRotationList.txt').toString().split("\n");
+const path = require("path")
+const weaponsArray = fs.readFileSync(path.resolve(__dirname, 'weaponsRotationList.txt')).toString().split("\n")
 
-initLoop().then(console.log('OK.'))
+giveAllWeaponsLoop().then(console.log('Giving WW2 Weapons...'))
 
-async function initLoop() {
-    for (i = 0; i < weaponsArray.length; i++) {
-        await giveRandomWeapons(weaponsArray[i])
-        await sleep(10000)
+async function giveAllWeaponsLoop() {
+    let activeSocket = await spinServer(server)
+    //console.log(activeSocket)
+    let playerList = activeSocket.playerList.PlayerList
+    while (playerList.length > 0) {
+            await giveWeapons(weaponsArray[i], playerList)
+            await sleep(30000)
     }
+    console.log("No Players! Stopping Weapons Rotation")
+    activeSocket.destroy()
 }
 
 function sleep(ms) {
@@ -18,14 +24,20 @@ function sleep(ms) {
     });
   }  
 
-async function giveRandomWeapons(weaponTxt) {
+
+async function getPlayerList() {
     let activeSocket = await spinServer(server)
     //console.log(activeSocket)
-    let players = activeSocket.playerList.PlayerList
-    console.log(players)
-    if (players) {
+    let playerList = activeSocket.playerList.PlayerList
+    activeSocket.destroy()
+    return playerList
+}
+
+async function giveWeapons(weaponTxt, playerList) {
+    console.log('Giving to ' + JSON.stringify(playerList))
+    if (playerList) {
         let promiseArray = []
-        players.forEach(player => {
+        playerList.forEach(player => {
             const command = 'GiveItem ' + player.UniqueId + ' ' + weaponTxt
             console.log(command)
             const commandPromise = commandHandler(activeSocket, command)
@@ -59,7 +71,7 @@ function spinServer(server) {
         socket.on('data', function (data) {
             if (data.toString().startsWith('Password:')) {
                 socket.write(server.password)
-                console.log(data.toString())
+                //console.log(data.toString())
             }
             if (data.toString().startsWith('Authenticated=1')) {
                 console.log('Logged in!');
@@ -79,7 +91,6 @@ function spinServer(server) {
         });
     });
 }
-
 
 function connect() {
     const port = 9100
